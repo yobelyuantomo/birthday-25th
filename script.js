@@ -1,0 +1,186 @@
+(() => {
+  const scenes = Array.from(document.querySelectorAll('.scene'));
+  const dotsWrap = document.getElementById('dots');
+  const nextBtn = document.getElementById('nextBtn');
+  const openBtn = document.getElementById('openBtn');
+  const track = document.getElementById('track');
+  let current = 0;
+
+  // ---- build dots ----
+  scenes.forEach((_, i) => {
+    const d = document.createElement('span');
+    d.className = 'dots__item';
+    dotsWrap.appendChild(d);
+  });
+  const dotEls = Array.from(dotsWrap.children);
+
+  function render() {
+    scenes.forEach((s, i) => {
+      s.classList.toggle('is-active', i === current);
+      s.classList.toggle('is-prev', i < current);
+    });
+    dotEls.forEach((d, i) => d.classList.toggle('is-active', i === current));
+    nextBtn.classList.toggle('is-hidden', current === scenes.length - 1);
+
+    if (current === scenes.length - 1) {
+      launchConfetti();
+    }
+  }
+
+  function goTo(i) {
+    if (i < 0 || i >= scenes.length) return;
+    current = i;
+    render();
+    scenes[current].scrollTop = 0;
+    // restart reveal animations on hero each time it becomes active
+    if (scenes[current].id === 'scene-1') {
+      const els = scenes[current].querySelectorAll('.reveal');
+      els.forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+    }
+  }
+
+  function next() { goTo(current + 1); }
+
+  nextBtn.addEventListener('click', next);
+  openBtn.addEventListener('click', next);
+
+  // letter scene (and any tall scene) can be scrolled internally — only
+  // change section once the user has reached the top/bottom edge of it
+  function atTop(el) { return el.scrollTop <= 1; }
+  function atBottom(el) { return el.scrollTop + el.clientHeight >= el.scrollHeight - 1; }
+
+  // ---- navigation lock so one scroll/swipe = exactly one section ----
+  let locked = false;
+  function unlockSoon() { setTimeout(() => { locked = false; }, 750); }
+  function tryNav(dir) {
+    if (locked) return;
+    locked = true;
+    dir > 0 ? next() : goTo(current - 1);
+    unlockSoon();
+  }
+
+  // desktop: mouse wheel
+  window.addEventListener('wheel', (e) => {
+    const sceneEl = scenes[current];
+    const scrollable = sceneEl.scrollHeight > sceneEl.clientHeight + 2;
+    if (scrollable) {
+      if (e.deltaY > 0 && !atBottom(sceneEl)) return; // let it scroll down internally
+      if (e.deltaY < 0 && !atTop(sceneEl)) return;     // let it scroll up internally
+    }
+    e.preventDefault();
+    if (Math.abs(e.deltaY) < 8) return;
+    tryNav(e.deltaY > 0 ? 1 : -1);
+  }, { passive: false });
+
+  // keyboard support
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'ArrowDown', 'Enter', ' '].includes(e.key)) { e.preventDefault(); tryNav(1); }
+    if (['ArrowLeft', 'ArrowUp'].includes(e.key)) { e.preventDefault(); tryNav(-1); }
+  });
+
+  // mobile: swipe up/down
+  let touchStartY = null;
+  track.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  track.addEventListener('touchmove', (e) => {
+    const sceneEl = scenes[current];
+    const scrollable = sceneEl.scrollHeight > sceneEl.clientHeight + 2;
+    if (scrollable && touchStartY !== null) {
+      const dy = touchStartY - e.touches[0].clientY;
+      if (dy > 0 && !atBottom(sceneEl)) return; // allow native scroll down
+      if (dy < 0 && !atTop(sceneEl)) return;     // allow native scroll up
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  track.addEventListener('touchend', (e) => {
+    if (touchStartY === null) return;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    const sceneEl = scenes[current];
+    const scrollable = sceneEl.scrollHeight > sceneEl.clientHeight + 2;
+    const blocked = scrollable && ((dy > 0 && !atBottom(sceneEl)) || (dy < 0 && !atTop(sceneEl)));
+    if (!blocked && Math.abs(dy) > 40) tryNav(dy > 0 ? 1 : -1);
+    touchStartY = null;
+  }, { passive: true });
+
+  render();
+
+  // ---- stacked collage: tap to cycle order, without triggering "next page" ----
+  document.querySelectorAll('[data-stack]').forEach(stack => {
+    const items = Array.from(stack.querySelectorAll('.stack__item'));
+    let order = [0, 1, 2]; // indices into items, order[0] = currently on top
+
+    function applyOrder() {
+      const classes = ['stack__item--1', 'stack__item--2', 'stack__item--3'];
+      // order[2] is the topmost visually (back -> front), so reverse-map
+      order.forEach((itemIndex, posFromTop) => {
+        const el = items[itemIndex];
+        el.classList.remove('stack__item--1', 'stack__item--2', 'stack__item--3');
+        // posFromTop 0 = top/front -> should get class --3 (highest, matches existing CSS front position)
+        el.classList.add(classes[2 - posFromTop]);
+      });
+    }
+
+    stack.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // move current top (order[0]) to the back of the pile
+      order.push(order.shift());
+      applyOrder();
+    });
+  });
+
+  // ---- petals ----
+  const petalsWrap = document.getElementById('petals');
+  const PETAL_COUNT = window.innerWidth < 640 ? 10 : 18;
+  for (let i = 0; i < PETAL_COUNT; i++) {
+    const p = document.createElement('span');
+    p.className = 'petal';
+    const left = Math.random() * 100;
+    const dur = 9 + Math.random() * 10;
+    const delay = Math.random() * 12;
+    const size = 8 + Math.random() * 10;
+    p.style.left = left + 'vw';
+    p.style.width = size + 'px';
+    p.style.height = (size * 1.25) + 'px';
+    p.style.animationDuration = dur + 's';
+    p.style.animationDelay = '-' + delay + 's';
+    p.style.opacity = (0.18 + Math.random() * 0.3).toFixed(2);
+    petalsWrap.appendChild(p);
+  }
+
+  // ---- parallax (pointer + gyroscope-lite via mousemove) ----
+  let mx = 0, my = 0;
+  window.addEventListener('mousemove', (e) => {
+    mx = (e.clientX / window.innerWidth - 0.5) * 2;
+    my = (e.clientY / window.innerHeight - 0.5) * 2;
+    applyParallax();
+  });
+
+  function applyParallax() {
+    const blobs = document.querySelectorAll('.blob');
+    blobs.forEach((b, i) => {
+      const factor = (i + 1) * 6;
+      b.style.transform = `translate(${mx * factor}px, ${my * factor}px)`;
+    });
+  }
+
+  // ---- confetti for final scene ----
+  let confettiLaunched = false;
+  function launchConfetti() {
+    if (confettiLaunched) return;
+    confettiLaunched = true;
+    const wrap = document.getElementById('confetti');
+    const colors = ['#D8748F', '#C9A36A', '#F6CADA', '#B9587A', '#FFF8F3'];
+    for (let i = 0; i < 60; i++) {
+      const c = document.createElement('i');
+      c.style.left = Math.random() * 100 + '%';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      c.style.animationDuration = (3 + Math.random() * 3) + 's';
+      c.style.animationDelay = (Math.random() * 1.2) + 's';
+      wrap.appendChild(c);
+    }
+  }
+})();

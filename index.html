@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Untuk Paulin, di Umur ke-25 ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Jost:wght@300;400;500;600&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- background ambience: petals + soft blobs, lives behind everything, parallax -->
+<div class="ambience" id="ambience">
+  <div class="blob blob--a"></div>
+  <div class="blob blob--b"></div>
+  <div class="blob blob--c"></div>
+  <div class="petals" id="petals"></div>
+</div>
+
+<!-- progress dots -->
+<nav class="dots" id="dots" aria-hidden="true"></nav>
+
+<main id="track">
+
+  <!-- 0. ENVELOPE / GERBANG -->
+  <section class="scene scene--gate" id="scene-0" data-index="0">
+    <div class="gate">
+      <div class="gate__seal" id="seal">
+        <svg viewBox="0 0 100 100" class="seal__heart">
+          <path d="M50 88 C 20 65, 5 45, 5 27 C 5 10, 22 2, 38 10 C 44 13, 48 18, 50 24 C 52 18, 56 13, 62 10 C 78 2, 95 10, 95 27 C 95 45, 80 65, 50 88 Z"/>
+        </svg>
+        <span class="seal__initial">P</span>
+      </div>
+      <p class="gate__eyebrow">sebuah surat kecil, untuk</p>
+      <h1 class="gate__name">Paulin</h1>
+      <button class="gate__btn" id="openBtn">
+        <span>Buka Suratnya</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- 1. HERO -->
+  <section class="scene scene--hero" id="scene-1" data-index="1">
+    <p class="hero__eyebrow reveal">a quarter century of you</p>
+    <h2 class="hero__title">
+      <span class="reveal" style="--d:0">Happy</span>
+      <span class="reveal" style="--d:1">25<sup>th</sup></span>
+      <span class="reveal reveal--script" style="--d:2">Birthday</span>
+      <span class="reveal hero__name" style="--d:3">Paulin</span>
+    </h2>
+    <p class="hero__sub reveal" style="--d:4">scroll perlahan, ada cerita kecil menunggumu di bawah sini</p>
+  </section>
+
+  <!-- 2. CHILDHOOD -->
+  <section class="scene scene--child scene--top" id="scene-2" data-index="2">
+    <div class="child__wrap">
+      <div class="polaroid polaroid--big">
+        <div class="polaroid__photo">
+          <img src="assets/images/foto-kecil.jpg" alt="Paulin kecil" loading="lazy">
+        </div>
+        <p class="polaroid__caption">si kecil yang tumbuh jadi sehangat ini</p>
+      </div>
+      <div class="child__text">
+        <p class="eyebrow">titik awal</p>
+        <h3>Dari gadis kecil ini...</h3>
+        <p class="child__body">...sampai jadi perempuan yang aku cintai hari ini. 25 tahun perjalanan, dan aku cuma kebagian sebagian kecilnya — tapi bersyukur banget bisa ada di dalamnya.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. PORTRAIT COLLAGE 1 -->
+  <section class="scene scene--collage scene--top" id="scene-3" data-index="3">
+    <p class="eyebrow eyebrow--center">satu dari banyak sisi dirimu</p>
+    <h3 class="collage__title">Cantik dari segala arah</h3>
+    <div class="stack" data-stack>
+      <div class="polaroid stack__item stack__item--1">
+        <div class="polaroid__photo"><img src="assets/images/potret-1.jpg" alt="Potret Paulin 1" loading="lazy"></div>
+      </div>
+      <div class="polaroid stack__item stack__item--2">
+        <div class="polaroid__photo"><img src="assets/images/potret-2.jpg" alt="Potret Paulin 2" loading="lazy"></div>
+      </div>
+      <div class="polaroid stack__item stack__item--3">
+        <div class="polaroid__photo"><img src="assets/images/potret-3.jpg" alt="Potret Paulin 3" loading="lazy"></div>
+      </div>
+    </div>
+    <p class="collage__hint">👆 ketuk tumpukan foto untuk lihat yang lain &nbsp;·&nbsp; (1/2)</p>
+  </section>
+
+  <!-- 4. PORTRAIT COLLAGE 2 -->
+  <section class="scene scene--collage scene--top" id="scene-4" data-index="4">
+    <p class="eyebrow eyebrow--center">dan ini sisi lainnya lagi</p>
+    <h3 class="collage__title">Selalu, dalam versi terbaikmu</h3>
+    <div class="stack stack--alt" data-stack>
+      <div class="polaroid stack__item stack__item--1">
+        <div class="polaroid__photo"><img src="assets/images/potret-4.jpg" alt="Potret Paulin 4" loading="lazy"></div>
+      </div>
+      <div class="polaroid stack__item stack__item--2">
+        <div class="polaroid__photo"><img src="assets/images/potret-5.jpg" alt="Potret Paulin 5" loading="lazy"></div>
+      </div>
+      <div class="polaroid stack__item stack__item--3">
+        <div class="polaroid__photo"><img src="assets/images/potret-6.jpg" alt="Potret Paulin 6" loading="lazy"></div>
+      </div>
+    </div>
+    <p class="collage__hint">👆 ketuk tumpukan foto untuk lihat yang lain &nbsp;·&nbsp; (2/2)</p>
+  </section>
+
+  <!-- 5. US / DATING -->
+  <section class="scene scene--us scene--top" id="scene-5" data-index="5">
+    <p class="eyebrow eyebrow--center">cerita kita</p>
+    <h3 class="collage__title">Sejauh ini, bersamamu</h3>
+    <div class="gallery">
+      <div class="polaroid gallery__item g1"><div class="polaroid__photo"><img src="assets/images/pasangan-1.jpg" alt="Yobel dan Paulin 1" loading="lazy"></div></div>
+      <div class="polaroid gallery__item g2"><div class="polaroid__photo"><img src="assets/images/pasangan-2.jpg" alt="Yobel dan Paulin 2" loading="lazy"></div></div>
+      <div class="polaroid gallery__item g3"><div class="polaroid__photo"><img src="assets/images/pasangan-3.jpg" alt="Yobel dan Paulin 3" loading="lazy"></div></div>
+      <div class="polaroid gallery__item g4"><div class="polaroid__photo"><img src="assets/images/pasangan-4.jpg" alt="Yobel dan Paulin 4" loading="lazy"></div></div>
+      <div class="polaroid gallery__item g5"><div class="polaroid__photo"><img src="assets/images/pasangan-5.jpg" alt="Yobel dan Paulin 5" loading="lazy"></div></div>
+    </div>
+  </section>
+
+  <!-- 6. LETTER / UCAPAN -->
+  <section class="scene scene--letter" id="scene-6" data-index="6">
+    <div class="letter">
+      <p class="letter__heading">Happy Birthday, cantikku Paulin! <span class="letter__icon">❤️🎂</span></p>
+      <p class="letter__body">
+        Cayaaanggkuuu, makaci ya udah jadi pacar aku yang penuh dengan kehangatan. Yang sabar mendengarkanku dan mengerti aku kalau aku bawaannya pengen telpoooon aja heheheheh
+      </p>
+      <p class="letter__body">
+        Semoga di umurmu yang nambah sebiji ini, kamu celalu diberi kesehatan, kesuksesan, dan kebahagiaan. Semoga hubungan kita berdua juga semakin bertumbuh dan menjadi indah setiap harinya.
+      </p>
+      <p class="letter__body">
+        Kekasihku yang kucintai, Selamat ulang tahun yang ke 25 yaa! Kamu tetep cantik kok meskipun umurmu udah seperempat abad wwkkwkwwk
+      </p>
+      <p class="letter__shout">I LOVEE YOUUU SO MUCHHH <span class="letter__hearts">❤️❤️❤️❤️❤️❤️</span></p>
+      <p class="letter__sign">Dari kekasih hatimu,<br><span>Yobel</span></p>
+    </div>
+    <div class="confetti" id="confetti"></div>
+  </section>
+
+</main>
+
+<button class="navbtn navbtn--next" id="nextBtn" aria-label="Lanjut">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>
