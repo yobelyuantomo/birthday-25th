@@ -326,3 +326,42 @@ button{font-family:inherit; cursor:pointer;}
   .stack{ height: min(280px, 50vw, 30vh); }
   .navbtn{ width:34px; height:34px; bottom: 12px; }
 }
+
+/* =========================================================
+   LIGHTBOX (tap foto di galeri "Sejauh ini, bersamamu" untuk preview gede)
+========================================================= */
+.lightbox{
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(63,34,51,.78);
+  backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s var(--ease);
+  padding: 6vh 6vw;
+}
+.lightbox.is-open{ opacity: 1; pointer-events: auto; }
+.lightbox__img{
+  max-width: min(560px, 88vw);
+  max-height: 82vh;
+  width: auto; height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  background: var(--paper);
+  padding: 10px;
+  box-shadow: 0 30px 70px -16px rgba(0,0,0,.5);
+  transform: scale(.92);
+  transition: transform .35s var(--ease);
+}
+.lightbox.is-open .lightbox__img{ transform: scale(1); }
+.lightbox__close{
+  position: absolute; top: 22px; right: 22px;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.4);
+  color: #fff; display:flex; align-items:center; justify-content:center;
+  transition: background .25s var(--ease);
+}
+.lightbox__close:hover{ background: rgba(255,255,255,.3); }
+
+.gallery__item{ cursor: pointer; }
+.gallery__item img{ transition: transform .3s var(--ease); }
+.gallery__item:hover img{ transform: scale(1.04); }

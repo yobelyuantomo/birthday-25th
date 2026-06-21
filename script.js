@@ -105,9 +105,40 @@
     touchStartY = null;
   }, { passive: true });
 
+  // ---- initial render ----
   render();
 
-  // ---- stacked collage: tap to cycle order, without triggering "next page" ----
+  // ---- gallery lightbox: tap a photo in "Sejauh ini, bersamamu" to preview it bigger ----
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+
+  function openLightbox(src, alt) {
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('is-open');
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+  }
+
+  document.querySelectorAll('.gallery .gallery__item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation(); // don't trigger section navigation
+      const img = item.querySelector('img');
+      if (img) openLightbox(img.src, img.alt);
+    });
+  });
+
+  lightboxClose.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox(); // click on the dark backdrop closes it
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+
   document.querySelectorAll('[data-stack]').forEach(stack => {
     const items = Array.from(stack.querySelectorAll('.stack__item'));
     let order = [0, 1, 2]; // indices into items, order[0] = currently on top
