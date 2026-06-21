@@ -112,11 +112,29 @@
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxSpinner = document.getElementById('lightboxSpinner');
+
+  let loadToken = 0; // bumped on every click so a slow-loading older photo never overwrites a newer one
 
   function openLightbox(src, alt) {
-    lightboxImg.src = src;
-    lightboxImg.alt = alt || '';
     lightbox.classList.add('is-open');
+    if (lightboxImg.src.endsWith(src)) return; // already showing this exact photo
+
+    loadToken++;
+    const myToken = loadToken;
+
+    lightboxImg.classList.add('is-loading');
+    lightboxSpinner.classList.add('is-visible');
+
+    const preloader = new Image();
+    preloader.onload = () => {
+      if (myToken !== loadToken) return; // a newer photo was requested meanwhile — ignore this stale result
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      lightboxImg.classList.remove('is-loading');
+      lightboxSpinner.classList.remove('is-visible');
+    };
+    preloader.src = src;
   }
   function closeLightbox() {
     lightbox.classList.remove('is-open');

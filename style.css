@@ -223,7 +223,7 @@ button{font-family:inherit; cursor:pointer;}
 ========================================================= */
 .collage__title{ font-size: clamp(1.5rem, 4.5vw, 2.6rem); font-style:italic; margin: 4px 0 clamp(20px, 4vh, 48px); color:var(--plum); }
 .stack{
-  position:relative; width: min(260px, 62vw); height: min(320px, 56vw, 34vh);
+  position:relative; width: min(260px, 62vw); aspect-ratio: 65 / 87;
   cursor: pointer;
   margin-top: 12px;
 }
@@ -312,6 +312,7 @@ button{font-family:inherit; cursor:pointer;}
 ========================================================= */
 @media (max-width: 640px){
   .scene{ padding: 6vh 6vw calc(90px + env(safe-area-inset-bottom)); }
+  .scene--top{ padding-top: 0; }
   .child__wrap{ flex-direction:column; gap: 5vh; }
   .child__text{ text-align:center; }
   .gallery{ height: 56vh; }
@@ -323,7 +324,7 @@ button{font-family:inherit; cursor:pointer;}
   .gate__seal{ width:64px; height:64px; }
   .hero__sub{ margin-top:14px; }
   .collage__title{ margin-bottom: 16px; }
-  .stack{ height: min(280px, 50vw, 30vh); }
+  .stack{ width: min(220px, 50vw); }
   .navbtn{ width:34px; height:34px; bottom: 12px; }
 }
 
@@ -353,6 +354,19 @@ button{font-family:inherit; cursor:pointer;}
   transition: transform .35s var(--ease);
 }
 .lightbox.is-open .lightbox__img{ transform: scale(1); }
+.lightbox__img{ opacity: 1; transition: transform .35s var(--ease), opacity .2s var(--ease); }
+.lightbox__img.is-loading{ opacity: 0; }
+
+.lightbox__spinner{
+  position: absolute; width: 34px; height: 34px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  opacity: 0; pointer-events: none;
+  animation: spin .8s linear infinite;
+}
+.lightbox__spinner.is-visible{ opacity: 1; }
+@keyframes spin{ to{ transform: rotate(360deg); } }
 .lightbox__close{
   position: absolute; top: 22px; right: 22px;
   width: 40px; height: 40px; border-radius: 50%;
