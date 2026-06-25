@@ -379,3 +379,56 @@ button{font-family:inherit; cursor:pointer;}
 .gallery__item{ cursor: pointer; }
 .gallery__item img{ transition: transform .3s var(--ease); }
 .gallery__item:hover img{ transform: scale(1.04); }
+
+/* =========================================================
+   MUSIC / MUTE BUTTON — floating bottom-right
+========================================================= */
+.musicbtn{
+  position: fixed;
+  right: clamp(14px, 4vw, 26px);
+  bottom: clamp(14px, 4vw, 26px);
+  z-index: 999;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--paper);
+  background: var(--rose);
+  box-shadow: 0 6px 20px rgba(185, 88, 122, .45);
+  opacity: .4;
+  transition: transform .25s var(--ease), background .25s var(--ease), box-shadow .25s var(--ease), opacity .35s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+/* fade to full opacity on hover / while pressed */
+.musicbtn:hover, .musicbtn:active, .musicbtn:focus-visible{ opacity: 1; }
+/* hidden until music has played at least once */
+.musicbtn.is-hidden{ opacity: 0; pointer-events: none; transform: scale(.7); }
+.musicbtn:hover{ transform: scale(1.08); background: var(--rose-deep); }
+.musicbtn:active{ transform: scale(.94); }
+.musicbtn svg{ display: none; }
+.musicbtn .musicbtn__on{ display: block; }
+.musicbtn.is-muted{ background: var(--plum-soft); box-shadow: 0 6px 20px rgba(63, 34, 51, .4); }
+.musicbtn.is-muted .musicbtn__on{ display: none; }
+.musicbtn.is-muted .musicbtn__off{ display: block; }
+
+/* gentle pulse to hint it's playing */
+.musicbtn:not(.is-muted)::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--rose);
+  animation: musicPulse 2.4s var(--ease) infinite;
+}
+@keyframes musicPulse{
+  0%   { transform: scale(1);   opacity: .6; }
+  70%  { transform: scale(1.6); opacity: 0;  }
+  100% { transform: scale(1.6); opacity: 0;  }
+}
+
+@media (max-width: 540px){
+  .musicbtn{ width: 46px; height: 46px; }
+}

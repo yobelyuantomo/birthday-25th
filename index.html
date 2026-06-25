@@ -11,6 +11,14 @@
 </head>
 <body>
 
+<!-- background music: autoplay + loop -->
+<audio id="bgMusic" src="assets/music/Happy birthday Music Box Lullaby.mp3" loop autoplay preload="auto"></audio>
+
+<button class="musicbtn is-hidden" id="musicBtn" aria-label="Matikan musik" title="Matikan musik">
+  <svg class="musicbtn__on" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="M16 8.5a4 4 0 010 7M18.5 6a7 7 0 010 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+  <svg class="musicbtn__off" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="M22 9l-6 6M16 9l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+
 <!-- background ambience: petals + soft blobs, lives behind everything, parallax -->
 <div class="ambience" id="ambience">
   <div class="blob blob--a"></div>

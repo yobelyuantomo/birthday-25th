@@ -20,7 +20,8 @@
       s.classList.toggle('is-prev', i < current);
     });
     dotEls.forEach((d, i) => d.classList.toggle('is-active', i === current));
-    nextBtn.classList.toggle('is-hidden', current === scenes.length - 1);
+    // hide the scroll-down arrow on the landing scene (use "Buka Suratnya") and on the last scene
+    nextBtn.classList.toggle('is-hidden', current === 0 || current === scenes.length - 1);
 
     if (current === scenes.length - 1) {
       launchConfetti();
@@ -53,6 +54,9 @@
   let locked = false;
   function unlockSoon() { setTimeout(() => { locked = false; }, 750); }
   function tryNav(dir) {
+    // on the landing scene, scroll/swipe/keyboard navigation is disabled —
+    // the visitor must press "Buka Suratnya" to continue (which also starts music)
+    if (current === 0 && dir > 0) return;
     if (locked) return;
     locked = true;
     dir > 0 ? next() : goTo(current - 1);
@@ -232,4 +236,64 @@
       wrap.appendChild(c);
     }
   }
+})();
+
+/* =========================================================
+   BACKGROUND MUSIC — autoplay, loop, floating mute button
+========================================================= */
+(function () {
+  const audio = document.getElementById('bgMusic');
+  const btn = document.getElementById('musicBtn');
+  if (!audio || !btn) return;
+
+  audio.volume = 0.55;
+  let userMuted = false;
+
+  function reflect() {
+    // reflect the user's intent, not the autoplay-blocked state — so the
+    // button shows "playing" by default even before the browser lets it start
+    const on = !userMuted;
+    btn.classList.toggle('is-muted', !on);
+    btn.setAttribute('aria-label', on ? 'Matikan musik' : 'Nyalakan musik');
+    btn.setAttribute('title', on ? 'Matikan musik' : 'Nyalakan musik');
+  }
+
+  function tryPlay() {
+    if (userMuted) return;
+    audio.muted = false;
+    audio.play().then(reflect).catch(reflect);
+  }
+
+  // attempt autoplay immediately
+  tryPlay();
+
+  // browsers often block autoplay until first interaction — retry on first gesture
+  // music starts only when the visitor actually navigates — i.e. presses
+  // "Buka Suratnya" or a navigation arrow, NOT on a random click
+  const openBtn = document.getElementById('openBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  [openBtn, nextBtn].forEach(b => b && b.addEventListener('click', tryPlay));
+  // keyboard navigation (arrows / enter / space) also counts
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Enter', ' '].includes(e.key)) tryPlay();
+  });
+
+  // mute / unmute toggle
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (audio.paused || audio.muted) {
+      userMuted = false;
+      audio.muted = false;
+      audio.play().catch(() => {});
+    } else {
+      userMuted = true;
+      audio.pause();
+    }
+    reflect();
+  });
+
+  // reveal the floating button only once music has actually started playing
+  audio.addEventListener('play', () => { btn.classList.remove('is-hidden'); reflect(); });
+  audio.addEventListener('pause', reflect);
+  reflect();
 })();
